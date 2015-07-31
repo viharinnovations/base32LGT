@@ -1,0 +1,35 @@
+{
+  "name": "base32lgt",
+  "version": "0.0.1",
+  "description": "base32LGT Javascript Encoder/Decoder",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viharinnovations/base32LGT.git"
+  },
+  "keywords": [
+    "base32LGT",
+    "utf-5",
+    "base32",
+    "bitcoin",
+    "OP_RETURN",
+    "blockchain",
+    "null",
+    "data",
+    "hex",
+    "hexadecimal",
+    "encoder",
+    "decoder",
+    "text",
+    "converter"
+  ],
+  "author": "Vihar Innovations LLP",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/viharinnovations/base32LGT/issues"
+  },
+  "homepage": "https://github.com/viharinnovations/base32LGT#readme"
+}

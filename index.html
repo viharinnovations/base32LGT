@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 
+  
+The MIT License (MIT)
+
+Copyright (c) 2015 Vihar Innovations LLP
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. 
+-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- !-->
+    <META CONTENT="index, follow" NAME="robots">
+    <title>base32LGT Javascript Encoder/Decoder | Vihar Innovations LLP</title>
+    <meta name="keywords" content="bitcoin,OP_RETURN,null,data,base32,utf-5,LG Text,base32LGT,encoder,decoder,javascript">
+    <meta name="description" content="Encodes and decodes Lowercase general text to base32LGT and vice-versa. ">
+    <meta name="author" content="Vihar Innovations LLP">
+
+
+    <!-- Google Authorship and Publisher Markup -->
+    <link rel="author" href="https://plus.google.com/u/0/115715089445361394361/posts" />
+    <link rel="publisher" href="https://plus.google.com/u/0/115715089445361394361" />
+    <meta name="google-site-verification" content="nldiJx49eBRCrnt9kZCRkyYuZZg9vGQT0Sk26r5pqSw" />
+
+    <!-- Schema.org markup for Google+ -->
+    <meta itemprop="name" content="base32LGT Javascript Encoder/Decoder | Vihar Innovations LLP">
+    <meta itemprop="description" content="Encodes and decodes Lowercase general text to base32LGT and vice-versa.">
+    <meta itemprop="image" content="https://viharinnovations.com/images/meta_images/base32LGT.png">
+
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="base32LGT Javascript Encoder/Decoder | Vihar Innovations LLP" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://viharinnovations.com/base32LGT" />
+    <meta property="og:image" content="https://viharinnovations.com/images/meta_images/base32LGT.png" />
+    <meta property="og:description" content="Encodes and decodes Lowercase general text to base32LGT and vice-versa." />
+    <!-- !-->
+
+    <!-- load custom font -->
+    <link href="css/roboto.css" rel="stylesheet" type="text/css" />
+    <!-- load MUI -->
+    <link href="css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="js/mui.min.js"></script>
+    <!-- custom font css -->
+    <style>
+        body {
+            font-family: "Roboto";
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mui-container-fluid mui-col-md-offset-1">
+
+
+
+        <div class="mui-appbar mui-col-md-11" style="margin-bottom:2.6%">
+	<style scoped>a{color:#FFFFFF}a:hover{color:#FFFFFE}</style>
+            <table width="100%">
+                <tr style="vertical-align:middle;">
+                    <td class="mui-appbar-height"><a href="https://viharinnovations.com/base32LGT/base32LGT.pdf">base32-LG-TEXT</a></td>
+                    <td class="mui-appbar-height" align="right"><a href="https://github.com/viharinnovations/base32LGT">GITHUB</a></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mui-row">
+            <div class="mui-col-md-1 mui-col-md-offset-4">
+                <button onclick="text2hex()" type="submit" class="mui-btn mui-btn-default mui-btn-raised mui-btn-primary">Encode</button>
+            </div>
+            <div class="mui-col-md-1 mui-col-md-offset-1">
+                <button onclick="hex2text()" type="submit" class="mui-btn mui-btn-default mui-btn-raised mui-btn-accent">Decode</button>
+            </div>
+        </div>
+
+        <div class="mui-row" style="margin-top:1.8%">
+            <div class="mui-col-md-4">
+
+
+
+                <form>
+                    <legend>lowercase GENERAL TEXT</legend>
+
+                    <div class="mui-form-group">
+                        <textarea id="lgtxt" class="mui-form-control" rows="13"></textarea>
+                        <label>a-z, space, comma, ?, period/dot, hypen, single-quotes</label>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="mui-col-md-3" style="margin-top:1.8%;text-align:center">
+                <span id="tbyte" style="font-size:1.5em">Text Bytes : 0</span>
+                <br/>
+                <br/>
+                <span id="hbyte" style="font-size:1.5em;">Hex Bytes : 0</span>
+                <br/>
+                <br/>
+                <br/>
+                <span id="warn" style="font-size:1.4em;color: #EF5350;"></span>
+                <br/>
+                <br/>
+                <span id="warn2" style="font-size:1.4em;color: #EF5350;"></span>
+            </div>
+
+            <div class="mui-col-md-4">
+
+
+
+                <form>
+                    <legend>BINARY HEX</legend>
+
+                    <div class="mui-form-group">
+                        <textarea id="hex" class="mui-form-control" rows="13"></textarea>
+                        <style scoped>
+                            .mui-form-control:focus {
+                                border-color: #FF5A92;
+                            }
+                            
+                            .mui-form-control:focus~label {
+                                color: #FF5A92;
+                            }
+                        </style>
+                        <label>0-9, a-f</label>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+        <div class="mui-divider-bottom mui-col-md-11" style="margin-top:2.6%">
+        </div>
+        <br/>
+        <div class="mui-row" style="margin-top:1.8%;text-align:center">
+            <small>&copy; <a href="https://viharinnovations.com/" style="color:#000000">Vihar Innovations LLP -2014-15</a></small>
+        </div>
+    </div>
+    <script src="js/base32_lg_text.min.js"></script>
+    <script>
+        function text2hex() {
+
+
+            text = document.getElementById("lgtxt").value;
+
+
+            if (text == null || text == "") {
+                document.getElementById("warn").style = "font-size:1.4em;color:#EF5350";
+                document.getElementById("warn").innerHTML = "Text field is Blank";
+                document.getElementById("hbyte").innerHTML = "Hex Bytes : 0";
+                document.getElementById("hex").value = "";
+                document.getElementById("tbyte").innerHTML = "Text Bytes : 0";
+                document.getElementById("warn2").innerHTML = "";
+            } else {
+
+                document.getElementById("tbyte").innerHTML = "Text Bytes : " + text.length;
+                var hex_var = new encode(text, base32);
+                if (hex_var.hex != -1) {
+                    document.getElementById("hbyte").innerHTML = "Hex Bytes : " + hex_var.hex_length;
+                    document.getElementById("hex").value = hex_var.hex;
+                    document.getElementById("warn").innerHTML = "Conversion to HEX : Success";
+                    document.getElementById("warn").style = "font-size:1.4em;color:#4CAF50";
+                    document.getElementById("warn2").innerHTML = "";
+                    if (hex_var.hex_length > 40) {
+                        document.getElementById("warn2").innerHTML = "OP_RETURN - Bitcoin - 40 byte limit exceeded";
+                    }
+                } else {
+                    document.getElementById("warn").style = "font-size:1.4em;color:#EF5350";
+                    document.getElementById("warn").innerHTML = "Unrecognized text character(s)";
+                    document.getElementById("hbyte").innerHTML = "Hex Bytes : 0";
+                    document.getElementById("hex").value = "";
+                    document.getElementById("warn2").innerHTML = "";
+                }
+            }
+
+        }
+
+        function hex2text() {
+
+
+            hex = document.getElementById("hex").value;
+
+            if (hex == null || hex == "") {
+
+                document.getElementById("warn").style = "font-size:1.4em;color:#EF5350";
+                document.getElementById("warn").innerHTML = "Hex field is Blank";
+                document.getElementById("lgtxt").value = "";
+                document.getElementById("tbyte").innerHTML = "Text Bytes : 0";
+                document.getElementById("warn2").innerHTML = "";
+                document.getElementById("hbyte").innerHTML = "Hex Bytes : 0";
+
+            } else {
+                hexlen = hex.length / 2;
+                document.getElementById("hbyte").innerHTML = "Hex Bytes : " + hexlen;
+                if (hex.length % 2 == 1) {
+                    document.getElementById("warn").style = "font-size:1.4em;color:#EF5350";
+                    document.getElementById("warn").innerHTML = "No. of Hex Nibbles cannot be odd";
+                    document.getElementById("lgtxt").value = "";
+                    document.getElementById("tbyte").innerHTML = "Text Bytes : 0";
+                    document.getElementById("warn2").innerHTML = "";
+                    document.getElementById("hbyte").innerHTML = "Hex Bytes : " + hexlen;
+                } else {
+
+
+
+                    var text_var = new decode(hex, base32);
+                    if (text_var.text != -1) {
+                        document.getElementById("hbyte").innerHTML = "Hex Bytes : " + hexlen;
+                        document.getElementById("tbyte").innerHTML = "Text Bytes : " + text_var.text_length;
+                        document.getElementById("lgtxt").value = text_var.text;
+                        document.getElementById("warn").innerHTML = "Conversion to Text : Success";
+                        document.getElementById("warn").style = "font-size:1.4em;color:#4CAF50";
+                        document.getElementById("warn2").innerHTML = "";
+                        if (hexlen > 40) {
+                            document.getElementById("warn2").innerHTML = "OP_RETURN - Bitcoin - 40 byte limit exceeded";
+                        }
+                    } else {
+                        document.getElementById("warn").style = "font-size:1.4em;color:#EF5350";
+                        document.getElementById("warn").innerHTML = "Unrecognized Hex character(s)";
+                        document.getElementById("tbyte").innerHTML = "Text Bytes : 0";
+                        document.getElementById("lgtxt").value = "";
+                        document.getElementById("warn2").innerHTML = "";
+                    }
+                }
+            }
+
+        }
+    </script>
+    <script>!function(e,a,t,n,c,o,s){e.GoogleAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,o=a.createElement(t),s=a.getElementsByTagName(t)[0],o.async=1,o.src=n,s.parentNode.insertBefore(o,s)}(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-62265478-1","auto"),ga("send","pageview");</script>
+</body>
+
+</html>
