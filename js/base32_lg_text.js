@@ -272,6 +272,18 @@ function encode(chars, base32) {
 
             //empty carry string
             result.carry = "";
+        } else {
+            if (result.carry.length >= 4 && iun < len - 1) {
+                //convert 4 carry bits to hex nibble
+                hex_val = parseInt(result.carry, 2).toString(16);
+
+                //push returned hex nibble to global stack
+                hex.append(hex_val);
+
+                //empty carry string
+                result.carry = "";
+            }
+
         }
 
         //store the carry, returned in current
