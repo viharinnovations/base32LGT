@@ -194,6 +194,17 @@ function p_last(x) {
     return tmp.toString();
 }
 
+//zero padding to complete 
+//the last 5 bit base32
+function p_last_d(x) {
+    var tmp = new StringBuffer();
+    for (i = 0; i < 5 - x.length; i++)
+        tmp.append("0");
+    tmp.unshift(x);
+    return tmp.toString();
+}
+
+
 
 
 //---------------------internal functions ----------------------------------------------//
@@ -251,7 +262,7 @@ function encode(chars, base32) {
         carry.clear();
 
         //check is carry has become 4 bits
-        if (result.carry.length >= 4) {
+        if (result.carry.length >= 4 && iun != len - 1 && parseInt(result.carry, 2).toString(16) != 0) {
 
             //convert 4 carry bits to hex nibble
             hex_val = parseInt(result.carry, 2).toString(16);
@@ -275,7 +286,14 @@ function encode(chars, base32) {
         //if carry remains after last iteration,
         //zero pad for 4 bit hex nibble  conformity
         if (iun == len && result.carry.length != 0) {
-            hex.append(parseInt(p_last(result.carry), 2).toString(16));
+
+            //dont zero padd if last 		
+            if (parseInt(p_last(result.carry), 2).toString(16) != 0)
+                hex.append(parseInt(p_last(result.carry), 2).toString(16));
+            else
+            //only single zero carried
+            if (result.carry == '0')
+                hex.append(parseInt(p_last(result.carry), 2).toString(16));
 
             //if no. of hex nibbles in o/p is odd
 
@@ -286,6 +304,13 @@ function encode(chars, base32) {
                 hex.unshift(parseInt("0000", 2).toString(16));
 
         }
+        if (iun == len && hex.toString().length % 2 == 1)
+        //add a zero nibble infront 
+        //of the global hex stack
+            hex.unshift(parseInt("0000", 2).toString(16));
+
+
+
 
     }
 
@@ -345,7 +370,7 @@ function decode(chars, base32) {
     while (iun < len && ret == 1) {
 
         //check for front zero padding nibble	
-        if (chars[iun] === '0' && iun == 0) {
+        if (chars[iun] === '0' && iun == 0 && chars[iun + 1] != 'a') {
             //ignore it, move to next hex nibble
             iun++;
         }
@@ -387,6 +412,7 @@ function decode(chars, base32) {
             //if return data-length is  5 bit base32 char
             if (bin.toString().length == 5) {
 
+
                 //convert data to decimal, find corresponding
                 //char in base32 char set, append to global text stack
                 text.append(base32[parseInt(bin.toString(), 2).toString(10)]);
@@ -396,14 +422,17 @@ function decode(chars, base32) {
 
                 //clear 5 bit bin stack
                 bin.clear();
+
             }
 
         } else {
+
             //get base32 char from the resp. decimal index
             //append to global text stack
             text.append(base32[parseInt(result.bin, 2).toString(10)]);
             prev_len = 5;
             bin.clear();
+
         }
 
         //set the flag as one time 
@@ -442,11 +471,11 @@ function decode(chars, base32) {
             if (prev_len < 5) {
 
                 bin.append(result.bin);
-                if (bin.toString().length == 5) {
-                    text.append(base32[parseInt(bin.toString(), 2).toString(10)]);
-                    prev_len = 5;
-                    bin.clear();
-                }
+
+                text.append(base32[parseInt(bin.toString(), 2).toString(10)]);
+                prev_len = 5;
+                bin.clear();
+
 
             } else {
                 text.append(base32[parseInt(result.bin, 2).toString(10)]);
@@ -459,6 +488,14 @@ function decode(chars, base32) {
 
 
         iun++;
+
+        if (iun == len && carry.toString().length != 0) {
+
+            ////dont zero padd/space if last 		
+            if (parseInt(p_last(carry.toString()), 2).toString(10) != 0)
+                text.append(base32[parseInt(p_last_d(carry.toString()), 2).toString(10)]);
+
+        }
 
     }
 
