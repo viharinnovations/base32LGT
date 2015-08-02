@@ -139,7 +139,6 @@ function slice_bin(x, carry, prev_len) {
 
     }
 
-
     //return object
     return {
         bin: bin_tmp.toString(),
@@ -303,8 +302,9 @@ function encode(chars, base32) {
             if (parseInt(p_last(result.carry), 2).toString(16) != 0)
                 hex.append(parseInt(p_last(result.carry), 2).toString(16));
             else
-            //only single zero carried
-            if (result.carry == '0')
+            //only single zero carried/ dont pad if padding would
+            //would make it odd length	
+            if (result.carry == '0' && hex.toString().length % 2 == 1)
                 hex.append(parseInt(p_last(result.carry), 2).toString(16));
 
             //if no. of hex nibbles in o/p is odd
@@ -378,13 +378,121 @@ function decode(chars, base32) {
     //one time exe flag
     var otflag = 0;
 
+    //to store find no. of front 0's -1
+    var wcnt = 0;
+
     //processing loop
     while (iun < len && ret == 1) {
 
-        //check for front zero padding nibble	
-        if (chars[iun] === '0' && iun == 0 && chars[iun + 1] != 'a') {
+        //front space padding
+        //processing, only first time
+        if (iun == 0) {
+
+            //trasnfer index to 
+            //space index
+            wcnt = iun;
+
+            //wcnt store find no. of front 0's -1
+            while (chars[wcnt] === '0' && chars[wcnt + 1] === '0') {
+
+                wcnt++;
+
+            }
+
+            //if any front space
+            //exists
+            if (wcnt != 0) {
+
+                //mark 3 spaces for 5 0's	
+                for (wi = 0; wi < parseInt((wcnt + 1) / 5); wi++)
+                    text.append("   ");
+
+                //for remainder 0 nibble
+                if ((wcnt + 1) % 5 == 0) {
+
+
+                    carry.append("0");
+
+                    //fill up space(s) for 5 or more nibbles 
+                    for (wi = 1; wi < parseInt((wcnt + 1) / 5); wi++)
+                        text.append(" ");
+
+                    //shift index to
+                    //first non zero byte
+                    iun = wcnt + 1;
+
+                }
+
+                //for remainder 1 nibble
+                if ((wcnt + 1) % 5 == 1) {
+
+                    carry.append("0000");
+
+                    for (wi = 0; wi < parseInt((wcnt + 1) / 5); wi++)
+                        text.append(" ");
+
+                    iun = wcnt + 1;
+
+                }
+
+                //for remainder 2 nibbles
+                if ((wcnt + 1) % 5 == 2) {
+
+                    carry.append("000");
+
+                    for (wi = 0; wi < parseInt((wcnt + 1) / 5); wi++)
+                        text.append(" ");
+
+                    //mark 1 space
+                    text.append(" ");
+
+                    iun = wcnt + 1;
+
+                }
+
+                //for remainder 3 nibbles
+                if ((wcnt + 1) % 5 == 3) {
+
+                    carry.append("00");
+
+                    for (wi = 0; wi < parseInt((wcnt + 1) / 5); wi++)
+                        text.append(" ");
+
+                    //mark 2 spaces
+                    text.append("  ");
+
+                    iun = wcnt + 1;
+
+                }
+
+                //for remainder 4 nibbles
+                if ((wcnt + 1) % 5 == 4) {
+
+                    carry.append("0");
+
+                    for (wi = 0; wi < parseInt((wcnt + 1) / 5); wi++)
+                        text.append(" ");
+
+                    //mark 3 spaces
+                    text.append("   ");
+
+                    iun = wcnt + 1;
+
+                }
+
+            }
+
+        }
+
+
+        //if wcnt was zero, and iun remains unchanged as 0,
+        //check for front zero padding nibble, don't ignore
+        //the front zero nibble, if the next nibble is a non-zero	
+        if (chars[iun] === '0' && chars[iun + 1] != '0' && iun == 0) {
+
             //ignore it, move to next hex nibble
             iun++;
+
         }
 
         //check for hex input char exception
@@ -455,12 +563,7 @@ function decode(chars, base32) {
             otflag = 2;
 
         //process 2nd hex nibble only once
-        if (otflag == 1) {
-
-
-
-
-
+        if (otflag == 1 && iun == 0) {
 
             iun++;
             //check for hex input char exception
@@ -506,6 +609,13 @@ function decode(chars, base32) {
             ////dont zero padd/space if last 		
             if (parseInt(p_last(carry.toString()), 2).toString(10) != 0)
                 text.append(base32[parseInt(p_last_d(carry.toString()), 2).toString(10)]);
+
+        }
+
+        //special case of padding one zero at last
+        if (iun == len && carry.toString().length == 0 && bin.toString().length == 4) {
+            bin.append("0");
+            text.append(base32[parseInt(bin.toString(), 2).toString(10)]);
 
         }
 

@@ -1,6 +1,6 @@
 {
   "name": "base32lgt",
-  "version": "0.0.1",
+  "version": "0.0.1b",
   "description": "base32LGT Javascript Encoder/Decoder",
   "main": "index.html",
   "scripts": {
